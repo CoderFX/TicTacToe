@@ -1,3 +1,5 @@
+// It works!
+
 import java.util.Scanner;
 
 public class TicTacToeMain {
@@ -8,18 +10,16 @@ public class TicTacToeMain {
         do {
             System.out.println("Current board layout:");
             game.printBoard();
-            int row;
-            int col;
+            String coord;
             do {
                 System.out.println("Player " + game.getCurrentPlayerMark() + ", enter an empty row and column to place your mark!");
-                row = scan.nextInt();
-                col = scan.nextInt();
+                coord = scan.nextLine();
             }
-            while (!game.placeMark(row, col));
+            while (!game.placeMark(coord));
             game.changePlayer();
         }
-        while (!game.checkForWin() && !game.isBoardFull());
-        if (game.isBoardFull() && !game.checkForWin()){
+        while (game.checkForWin() && !game.isBoardFull());
+        if (game.isBoardFull() && game.checkForWin()){
             System.out.println("Game is a tie!");
         } else {
             System.out.println("Current board layout:");
