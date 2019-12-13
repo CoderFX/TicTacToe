@@ -4,7 +4,7 @@ public class Game {
 
     public Game() {
         board = new String[3][3];
-        currentPlayerMark = "X";
+        currentPlayerMark = "X";  // Can be changed between X and O
         initializeBoard();
     }
 
