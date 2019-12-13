@@ -1,20 +1,22 @@
-public class Game {
+import java.util.regex.Pattern;
+
+class Game {
     private String[][] board;
     private String currentPlayerMark;
 
-    public Game() {
+    Game() {
         board = new String[3][3];
         currentPlayerMark = "X";  // Can be changed between X and O
         initializeBoard();
     }
 
-    public String getCurrentPlayerMark()
+    String getCurrentPlayerMark()
     {
         return currentPlayerMark;
     }
 
     // Set/Reset the board back to all empty values.
-    public void initializeBoard() {
+    private void initializeBoard() {
         int coord = 0;
 
         // Loop through rows
@@ -29,7 +31,7 @@ public class Game {
     }
 
     // Print the current board
-    public void printBoard() {
+    void printBoard() {
         System.out.println("-------------");
 
         for (int i = 0; i < 3; i++) {
@@ -44,12 +46,12 @@ public class Game {
 
     // Loop through all cells of the board and if one is found to be empty (contains char '-') then return false.
     // Otherwise the board is full.
-    public boolean isBoardFull() {
+    boolean isBoardFull() {
         boolean isFull = true;
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (board[i][j].equals("-")) {
+                if (Pattern.matches("\\d", board[i][j])) {
                     isFull = false;
                 }
             }
@@ -60,10 +62,9 @@ public class Game {
 
     // Returns true if there is a win, false otherwise.
     // This calls our other win check functions to check the entire board.
-    public boolean checkForWin() {
-        return (checkRowsForWin() || checkColumnsForWin() || checkDiagonalsForWin());
+    boolean checkForWin() {
+        return (!checkRowsForWin() && !checkColumnsForWin() && !checkDiagonalsForWin());
     }
-
 
     // Loop through rows and see if any are winners.
     private boolean checkRowsForWin() {
@@ -85,19 +86,19 @@ public class Game {
         return false;
     }
 
-
     // Check the two diagonals to see if either is a win. Return true if either wins.
     private boolean checkDiagonalsForWin() {
         return ((checkRowCol(board[0][0], board[1][1], board[2][2])) || (checkRowCol(board[0][2], board[1][1], board[2][0])));
     }
 
-    // Check to see if all three values are the same (and not empty) indicating a win.
+    // Check to see if all three values are not empty indicating a win.
     private boolean checkRowCol(String c1, String c2, String c3) {
-        return ((!c1.equals("-")) && (c1 == c2) && (c2 == c3));
+        return (c1.equals("X") && c2.equals("X") && c3.equals("X") || c1.equals("O") && c2.equals("O") && c3.equals("O"));
+        //return (!Pattern.matches("\\d", c1) && !Pattern.matches("\\d", c2) && !Pattern.matches("\\d", c3));
     }
 
     // Change player marks back and forth.
-    public void changePlayer() {
+    void changePlayer() {
         if (currentPlayerMark.equals("X")) {
             currentPlayerMark = "O";
         }
@@ -107,18 +108,16 @@ public class Game {
     }
 
     // Places a mark at the cell specified by row and col with the mark of the current player.
-    public boolean placeMark(int row, int col) {
+    boolean placeMark(String coord) {
 
-        // Make sure that row and column are in bounds of the board.
-        if ((row >= 0) && (row < 3)) {
-            if ((col >= 0) && (col < 3)) {
-                if (board[row][col].equals("-")) {
-                    board[row][col] = currentPlayerMark;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j].equals(coord)) {
+                    board[i][j] = currentPlayerMark;
                     return true;
                 }
             }
         }
-
         return false;
     }
 
